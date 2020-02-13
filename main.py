@@ -161,6 +161,7 @@ class Encrypt(Frame):
         print(ciph)
 
 
+
 if __name__ == "__main__":
     root = Tk()
     root.title("Encryption")
