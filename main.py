@@ -1,6 +1,7 @@
 from tkinter import *
 
 
+
 def converter(word):
     """
     This method is used to covert alphabetic charecters into the required index
