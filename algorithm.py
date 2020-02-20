@@ -75,7 +75,7 @@ def Encrypt():
 
     for x in conv:
         if index == 2:
-            print(x)
+            # print(x)
             NOS = x
             index = index - 1
             nIter = nIter + 1
@@ -84,9 +84,9 @@ def Encrypt():
             for last in output:
                 str1 += last
             finalList.append(str1)
-            print(finalList)
+            # print(finalList)
         elif index == 1:
-            print(x)
+            # print(x)
             index = index - 1
             nIter = nIter + 1
             NOL = x
@@ -95,7 +95,7 @@ def Encrypt():
             for last2 in output2:
                 str2 += last2
             finalList.append(str2)
-            print(finalList)
+            # print(finalList)
         else:
             if NOL != 0:
                 NACC = (x + NOS) % 26
@@ -103,12 +103,16 @@ def Encrypt():
                     NACC = 26
                 finalList.append(NACC)
                 NOL = NOL - 1
-            else:
-                index = 2
+                if NOL == 0:
+                    index=2
     print(MAList)
     print(conv)
     print(finalList)
-    print(converter2(finalList))
+    encryptedList = converter2(finalList)
+    encryptedText = ""
+    for last in encryptedList:
+        encryptedText += last
+    print("This is the encrypted Text: " + encryptedText)
 
 
 Encrypt()
