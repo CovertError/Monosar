@@ -1,31 +1,17 @@
 from tkinter import *
 
-def encrypt(text,s):
-   result = ""
-   # transverse the plain text
-   for i in range(
-           len(text)):
-      char = text[i]
 
-      # Encrypt uppercase characters in plain text
+def encrypt(text, s):
+    result = ""
+    for i in range(
+            len(text)):
+        char = text[i]
 
-      if (char.isupper()):
-         result += chr((ord(char) + s-65) % 26 + 65)
-      # Encrypt lowercase characters in plain text
-      else:
-         result += chr((ord(char) + s - 97) % 26 + 97)
-   return result
-#check the above function
-#text = ""
-
-
-s = 3 # number of shifts
-
-
-print ("Plain Text :" + text)
-print ("Shift pattern : " + str(s))
-print ("Cipher: " + encrypt(text,s))
-
+        if (char.isupper()):
+            result += chr((ord(char) + s - 65) % 26 + 65)
+        else:
+            result += chr((ord(char) + s - 97) % 26 + 97)
+    return result
 
 
 def converter(word):
@@ -185,7 +171,6 @@ class Encrypt(Frame):
         self.RESULT.insert(0, final_encrypted)
         print("The index points of the ciphertext is: ")
         print(ciph)
-
 
 
 if __name__ == "__main__":
