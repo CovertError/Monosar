@@ -1,4 +1,5 @@
-text = "hello my name is omar"
+import random
+from random import shuffle
 
 
 def converter(word):
@@ -34,7 +35,7 @@ def converter2(dec):
     output types: array of strings
     """
     thisdict2 = {
-        "1": "a",
+        "0": "a",
         "2": "b", "3": "c", "4": "d", "5": "e", "6": "f", "7": "g", "8": "h", "9": "i",
         "10": "j", "11": "k", "12": "l", "13": "m", "14": "n", "15": "o", "16": "p",
         "17": "q", "18": "r", "19": "s", "20": "t", "21": "u", "22": "v", "23": "w",
@@ -49,7 +50,59 @@ def converter2(dec):
             myList.append(' ')
         elif y in thisdict2:
             myList.append(thisdict2[y])
-        else:
-            myList.append('/')
     return myList
+
+def Mono():
+    MAlist = [[i] for i in range(25)]
+    shuffle(MAlist)
+    print(MAlist)
+    return MAlist
+
+def Encrypt():
+    text = "hello"
+    index = 2
+    MAList = Mono()
+    NOS = 0
+    NOL = 0
+    finalList = []
+    NACC = 0
+    nIter = 0
+    output = 0
+
+    conv = converter(text)
+
+    for x in conv:
+        if index == 2:
+            NOS = x
+            index = index - 1
+            nIter = nIter + 1
+            output = MAList[x]
+            str1 = 0
+            for last in output:
+                str1 += last
+            finalList.append(str1)
+        elif index == 1:
+            index = index - 1
+            nIter = nIter + 1
+            NOL = x
+            str2 = 0
+            for last in output:
+                str2 += last
+            finalList.append(str2)
+        else:
+            if NOL != 0:
+                NACC = (x + NOS) % 26
+                finalList.append(NACC)
+            else:
+                index = 2
+
+    print(finalList)
+    print(converter2(finalList))
+
+
+Encrypt()
+
+
+
+
 
