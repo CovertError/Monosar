@@ -10,11 +10,11 @@ def converter(word):
     Return : array of integers
     """
     thisdict = {
-        "a": "0",
-        "b": "1", "c": "2", "d": "3", "e": "4", "f": "5", "g": "6", "h": "7", "i": "8",
-        "j": "9", "k": "10", "l": "11", "m": "12", "n": "13", "o": "14", "p": "15",
-        "q": "16", "r": "17", "s": "18", "t": "19", "u": "20", "v": "21", "w": "22",
-        "x": "23", "y": "24", "z": "25"
+        "a": "1",
+        "b": "2", "c": "3", "d": "4", "e": "5", "f": "6", "g": "7", "h": "8", "i": "9",
+        "j": "10", "k": "11", "l": "12", "m": "13", "n": "14", "o": "15", "p": "16",
+        "q": "17", "r": "18", "s": "19", "t": "20", "u": "21", "v": "22", "w": "23",
+        "x": "24", "y": "25", "z": "26"
     }
     myList = []
     for x in word:
@@ -35,11 +35,11 @@ def converter2(dec):
     output types: array of strings
     """
     thisdict2 = {
-        "a": "0",
-        "b": "1", "c": "2", "d": "3", "e": "4", "f": "5", "g": "6", "h": "7", "i": "8",
-        "j": "9", "k": "10", "l": "11", "m": "12", "n": "13", "o": "14", "p": "15",
-        "q": "16", "r": "17", "s": "18", "t": "19", "u": "20", "v": "21", "w": "22",
-        "x": "23", "y": "24", "z": "25"
+        "1": "a",
+        "2": "b", "3": "c", "4": "d", "5": "e", "6": "f", "7": "g", "8": "h", "9": "i",
+        "10": "j", "11": "k", "12": "l", "13": "m", "14": "n", "15": "o", "16": "p",
+        "17": "q", "18": "r", "19": "s", "20": "t", "21": "u", "22": "v", "23": "w",
+        "24": "x", "25": "y", "26": "z"
     }
     temp = []
     myList = []
@@ -55,11 +55,12 @@ def converter2(dec):
 def Mono():
     MAlist = [[i] for i in range(25)]
     shuffle(MAlist)
-    print(MAlist)
+    MAlist.insert(0, 0)
+    # print(MAlist)
     return MAlist
 
 def Encrypt():
-    text = "hello"
+    text = "helloamigoimyusra"
     index = 2
     MAList = Mono()
     NOS = 0
@@ -68,11 +69,13 @@ def Encrypt():
     NACC = 0
     nIter = 0
     output = 0
+    output2 = 0
 
     conv = converter(text)
 
     for x in conv:
         if index == 2:
+            print(x)
             NOS = x
             index = index - 1
             nIter = nIter + 1
@@ -81,21 +84,29 @@ def Encrypt():
             for last in output:
                 str1 += last
             finalList.append(str1)
+            print(finalList)
         elif index == 1:
+            print(x)
             index = index - 1
             nIter = nIter + 1
             NOL = x
+            output2 = MAList[x]
             str2 = 0
-            for last in output:
-                str2 += last
+            for last2 in output2:
+                str2 += last2
             finalList.append(str2)
+            print(finalList)
         else:
             if NOL != 0:
                 NACC = (x + NOS) % 26
+                if NACC == 0:
+                    NACC = 26
                 finalList.append(NACC)
+                NOL = NOL - 1
             else:
                 index = 2
-
+    print(MAList)
+    print(conv)
     print(finalList)
     print(converter2(finalList))
 
