@@ -1,11 +1,10 @@
-import random
 from random import shuffle
 
 finalDecryptList = []
 finalEncryptList = []
-MAList = []
 encryptedText = ""
 decryptedText = ""
+
 
 def converter(word):
     """
@@ -62,14 +61,21 @@ def Mono():
     MAlist = [[i] for i in range(27)]
     MAlist.pop(0)
     shuffle(MAlist)
-    # print(MAlist)
     return MAlist
 
+
+def MonoToNon(monoNumber):
+    indx = -1
+    for x in MAList:
+        if x == monoNumber:
+            indx += 1
+            return indx
+        else:
+            indx += 1
 
 def NoMono():
     NoMAlist = [[i] for i in range(27)]
     NoMAlist.pop(0)
-    # print(NoMAlist)
     return NoMAlist
 
 
@@ -77,16 +83,13 @@ def Encrypt():
     global encryptedText
     text = "helloamigoimyusra"
     index = 2
-    MAList = Mono()
     NOS = 0
     NOL = 0
     nIter = 0
-
     conv = converter(text)
 
     for x in conv:
         if index == 2:
-            # print(x)
             NOS = x
             index = index - 1
             nIter = nIter + 1
@@ -95,9 +98,7 @@ def Encrypt():
             for last in output:
                 str1 += last
             finalEncryptList.append(str1)
-            # print(finalList)
         elif index == 1:
-            # print(x)
             index = index - 1
             nIter = nIter + 1
             NOL = x
@@ -106,7 +107,6 @@ def Encrypt():
             for last2 in output2:
                 str2 += last2
             finalEncryptList.append(str2)
-            # print(finalList)
         else:
             if NOL != 0:
                 NACC = (x + NOS) % 26
@@ -116,9 +116,7 @@ def Encrypt():
                 NOL = NOL - 1
                 if NOL == 0:
                     index = 2
-    print(MAList)
     NoMono()
-    print(conv)
     encryptedList = converter2(finalEncryptList)
     for last in encryptedList:
         encryptedText = encryptedText + last
@@ -126,35 +124,21 @@ def Encrypt():
 
 
 def Decrypt():
-
     global decryptedText
-    text = "helloamigoimyusra"
     index = 2
     NOS = 0
-    nIter = 0
     NOL = 0
-    NoMonoList = NoMono()
     for x in finalEncryptList:
         if index == 2:
-            # print(x)
-            NOS = x
             index = index - 1
-            output = NoMonoList[x]
-            str1 = 0
-            for last in output:
-                str1 += last
-            finalDecryptList.append(str1)
-            print(finalDecryptList)
+            output = MonoToNon([x])
+            NOS = output
+            finalDecryptList.append(output)
         elif index == 1:
-            # print(x)
             index = index - 1
-            NOL = x
-            output2 = NoMonoList[x]
-            str2 = 0
-            for last2 in output2:
-                str2 += last2
-            finalDecryptList.append(str2)
-            # print(finalList)
+            output2 = MonoToNon([x])
+            NOL = output2
+            finalDecryptList.append(output2)
         else:
             if NOL != 0:
                 NACC = (x - NOS) % 26
@@ -164,16 +148,13 @@ def Decrypt():
                 NOL = NOL - 1
                 if NOL == 0:
                     index = 2
-    # print(MAList)
-
-    # print(conv)
     DecryptList = converter2(finalDecryptList)
     for last in DecryptList:
         decryptedText = decryptedText + last
 
     print("This is the decrypted Text: " + decryptedText)
-    # print(finalList)
 
 
+MAList = Mono()
 Encrypt()
 Decrypt()
