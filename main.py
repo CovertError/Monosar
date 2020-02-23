@@ -1,5 +1,4 @@
 from tkinter import *
-
 def encrypt(text, s):
     result = ""
     for i in range(
@@ -70,25 +69,36 @@ class Encrypt(Frame):
         Frame.__init__(self, pencere)
         self.pencere = pencere
 
-        Label(pencere, text="Please insert plain text?: ", relief=GROOVE, width=25).place(x=120, y=30)
+        Label(pencere, text="Enter text... ", relief=GROOVE, width=25).place(x=120, y=15)
         self.Ent1 = Entry(pencere, width=25)
-        self.Ent1.place(x=120, y=60)
+        self.Ent1.place(x=118, y=50)
 
-        # Label(pencere, text="Enter key: ", relief=GROOVE, width=30).place(x=113, y=90)
+        Label(pencere, text="Encrypt", relief=GROOVE, width=15).place(x=90, y=100)
+        Label(pencere, text="Decrypt", relief=GROOVE, width=15).place(x=240, y=100)
+
+         #Label(pencere, text="Enter key: ", relief=GROOVE, width=30).place(x=113, y=90)
         # self.Ent2 = Entry(pencere, width=30)
         # self.Ent2.place(x=130, y=120)
 
         # Button(pencere, text="Encrypt", relief=GROOVE, font="bold", command=self.Encrypt).place(x=130, y=150)
         # Button(pencere, text="Decrypt", relief=GROOVE, font="bold", command=self.Decrypt).place(x=246, y=150)
-        Label(pencere, text="The initial conf:\n"
-                            " a b c d e f g h i j k l m n o p", relief=GROOVE, width=25).place(x=120, y=90)
+
+
+        Label(pencere, text="The intial configuration...", relief=GROOVE, width=25).place(x=500, y=15)
+        # print the list
+        #self.Ent1 = Entry(pencere, width=25)
+        #self.Ent1.place(x=118, y=190)
 
         # self.Ent1 = Entry(pencere, width=25)
         # self.Ent1.place(x=120, y=120)
 
-        Label(pencere, text="The Result: ", relief=GROOVE, width=25).place(x=120, y=150)
-        self.RESULT = Entry(pencere, width=25)
-        self.RESULT.place(x=120, y=180)
+        Label(pencere, text="The Result: ", relief=GROOVE, width=25).place(x=120, y=160)
+        self.Ent1 = Entry(pencere, width=25)
+        self.Ent1.place(x=118, y=190)
+
+       #Label(pencere, text="The Result: ", relief=GROOVE, width=25).place(x=120, y=150)
+        # self.RESULT = Entry(pencere, width=25)
+        # self.RESULT.place(x=120, y=180)
         # Label(pencere, text=" index points of the ciphertext is: ", relief=GROOVE, width=30).place(x=20, y=230)
         # self.RESULTarray = Entry(pencere, width=30)
         # self.RESULTarray.place(x=250, y=230)
@@ -183,7 +193,7 @@ if __name__ == "__main__":
     root.resizable(False, False)  # This code helps to disable windows from resizing
 
     window_height = 300
-    window_width = 450
+    window_width = 800
 
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
