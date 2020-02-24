@@ -1,15 +1,6 @@
+from random import shuffle
 from tkinter import *
-def encrypt(text, s):
-    result = ""
-    for i in range(
-            len(text)):
-        char = text[i]
 
-        if (char.isupper()):
-            result += chr((ord(char) + s - 65) % 26 + 65)
-        else:
-            result += chr((ord(char) + s - 97) % 26 + 97)
-    return result
 
 def converter(word):
     """
@@ -59,49 +50,61 @@ def converter2(dec):
             myList.append(' ')
         elif y in thisdict2:
             myList.append(thisdict2[y])
-        else:
-            myList.append('/')
     return myList
 
 
+def Mono():
+    MAlist = [[i] for i in range(27)]
+    MAlist.pop(0)
+    shuffle(MAlist)
+    return MAlist
+
+
+def MonoToNon(monoNumber, MAList):
+    indx = -1
+    for x in MAList:
+        if x == monoNumber:
+            indx += 1
+            return indx
+        else:
+            indx += 1
+
+
+def NoMono():
+    NoMAlist = [[i] for i in range(27)]
+    NoMAlist.pop(0)
+    return NoMAlist
+
+
+MAList = Mono()
+finalDecryptList = []
+finalEncryptList = []
+encryptedList = []
+
 class Encrypt(Frame):
+
+    encryptedText = ""
+    decryptedText = ""
+
     def __init__(self, pencere):
         Frame.__init__(self, pencere)
         self.pencere = pencere
 
-        Label(pencere, text="Enter text... ", relief=GROOVE, width=25).place(x=120, y=15)
-        self.Ent1 = Entry(pencere, width=25)
-        self.Ent1.place(x=118, y=50)
+        Label(pencere, text="Enter text... ", relief=GROOVE, width=25).place(x=210, y=15)
+        self.Ent1 = Entry(pencere, width=30)
+        self.Ent1.place(x=208, y=50)
 
-        Label(pencere, text="Encrypt", relief=GROOVE, width=15).place(x=90, y=100)
-        Label(pencere, text="Decrypt", relief=GROOVE, width=15).place(x=240, y=100)
+        Button(pencere, text="Encrypt", relief=GROOVE, font="bold", command=self.Encrypt).place(x=180, y=100)
+        Button(pencere, text="Decrypt", relief=GROOVE, font="bold", command=self.Decrypt).place(x=340, y=100)
 
-         #Label(pencere, text="Enter key: ", relief=GROOVE, width=30).place(x=113, y=90)
-        # self.Ent2 = Entry(pencere, width=30)
-        # self.Ent2.place(x=130, y=120)
+        Label(pencere, text="The intial configuration...", relief=GROOVE, width=25).place(x=210, y=240)
 
-        # Button(pencere, text="Encrypt", relief=GROOVE, font="bold", command=self.Encrypt).place(x=130, y=150)
-        # Button(pencere, text="Decrypt", relief=GROOVE, font="bold", command=self.Decrypt).place(x=246, y=150)
+        Label(pencere, text="The Result: ", relief=GROOVE, width=25).place(x=210, y=160)
+        self.RESULTExplain = Text(pencere, width=77)
+        self.RESULTExplain.place(x=20, y=290)
+        self.Result = Entry(pencere, width=30)
+        self.Result.place(x=208, y=190)
 
-
-        Label(pencere, text="The intial configuration...", relief=GROOVE, width=25).place(x=500, y=15)
-        # print the list
-        #self.Ent1 = Entry(pencere, width=25)
-        #self.Ent1.place(x=118, y=190)
-
-        # self.Ent1 = Entry(pencere, width=25)
-        # self.Ent1.place(x=120, y=120)
-
-        Label(pencere, text="The Result: ", relief=GROOVE, width=25).place(x=120, y=160)
-        self.Ent1 = Entry(pencere, width=25)
-        self.Ent1.place(x=118, y=190)
-
-       #Label(pencere, text="The Result: ", relief=GROOVE, width=25).place(x=120, y=150)
-        # self.RESULT = Entry(pencere, width=25)
-        # self.RESULT.place(x=120, y=180)
-        # Label(pencere, text=" index points of the ciphertext is: ", relief=GROOVE, width=30).place(x=20, y=230)
-        # self.RESULTarray = Entry(pencere, width=30)
-        # self.RESULTarray.place(x=250, y=230)
 
     def Decrypt(self):
         """
@@ -111,34 +114,43 @@ class Encrypt(Frame):
         Return: Array of Integers
 
         """
-        key = self.Ent2.get()
-        key = int(key)
-        encr = self.RESULTarray.get()
-        finList = []
-        encr = encr.split(" ")
-        print(encr)
-        test = False
-        for num in encr:
-            if num != '/':
-                num = int(num)
-                if test:
-                    key = key + num
-                    test = False
-                while num < key:
-                    num = num + 27
-                num = num - key
-                finList.append(int(num))
-                key = key + num
 
+        global finalDecryptList
+        global decryptedText
+        global finalEncryptList
+        global encryptedText
+        global decryptedText
+        global MAList
+
+        index = 2
+        NOS = 0
+        NOL = 0
+        for x in finalEncryptList:
+            if index == 2:
+                index = index - 1
+                output = MonoToNon([x], MAList)
+                NOS = output
+                finalDecryptList.append(output)
+            elif index == 1:
+                index = index - 1
+                output2 = MonoToNon([x], MAList)
+                NOL = output2
+                finalDecryptList.append(output2)
             else:
-                test = True
-        decrypted = ''
-        decrypt_list = converter2(finList)
-        for last in decrypt_list:  # Loop used to display the decrypted ciphertext
-            decrypted += last
-        self.RESULT.delete(0, END)
-        self.RESULT.insert(0, decrypted)
-        self.RESULTarray.delete(0, END)
+                if NOL != 0:
+                    NACC = (x - NOS) % 26
+                    if NACC == 0:
+                        NACC = 26
+                    finalDecryptList.append(NACC)
+                    NOL = NOL - 1
+                    if NOL == 0:
+                        index = 2
+        DecryptList = converter2(finalDecryptList)
+        for last in DecryptList:
+            decryptedText = decryptedText + last
+
+        self.Result.delete(0, END)
+        self.Result.insert(0, decryptedText)
 
     def Encrypt(self):
 
@@ -148,52 +160,61 @@ class Encrypt(Frame):
         Input types: Integer, array of integers
         Return: Array of integers
         """
-        conv = self.Ent1.get()
-        conv = converter(conv)
-        key = self.Ent2.get()
-        ciph = []
-        print(conv)
-        i = 0
-        v = int(conv[0]) + int(key)
+        global MAList
+        global encryptedText
+        global finalEncryptList
+        encryptedText = ""
+        text = self.Ent1.get()
+        index = 2
+        NOS = 0
+        NOL = 0
+        nIter = 0
+        conv = converter(text)
 
-        for num in conv:
-            if num != ' ':
-                temp = v % 27
-                if temp != 0:
-                    ciph.append(temp)
 
-                else:
-                    ciph.append(str("/"))
-                    v = v + conv[i]
-                    temp = v % 27
-                    ciph.append(temp)
-                i = i + 1
-                if i == len(conv):
-                    break
-
-                v = v + conv[i]
+        for x in conv:
+            if index == 2:
+                NOS = x
+                index = index - 1
+                nIter = nIter + 1
+                output = MAList[x]
+                str1 = 0
+                for last in output:
+                    str1 += last
+                finalEncryptList.append(str1)
+            elif index == 1:
+                index = index - 1
+                nIter = nIter + 1
+                NOL = x
+                output2 = MAList[x]
+                str2 = 0
+                for last2 in output2:
+                    str2 += last2
+                finalEncryptList.append(str2)
             else:
-                ciph.append(' ')
-        encrypted = converter2(ciph)
-        final_encrypted = ''
-        for some in encrypted:
-            final_encrypted += str(some)
-        self.RESULTarray.delete(0, END)
-        self.RESULTarray.insert(0, ciph)
-        self.RESULT.delete(0, END)
-        self.RESULT.insert(0, final_encrypted)
-        print("The index points of the ciphertext is: ")
-        print(ciph)
+                if NOL != 0:
+                    NACC = (x + NOS) % 26
+                    if NACC == 0:
+                        NACC = 26
+                    finalEncryptList.append(NACC)
+                    NOL = NOL - 1
+                    if NOL == 0:
+                        index = 2
+        encryptedList = converter2(finalEncryptList)
+        for last in encryptedList:
+            encryptedText = encryptedText + last
+        self.Result.delete(0, END)
+        self.Result.insert(0, encryptedText)
 
 
 if __name__ == "__main__":
     root = Tk()
-    root.title("Monosar ")
+    root.title("Monosar")
 
-    root.resizable(False, False)  # This code helps to disable windows from resizing
+    # root.resizable(False, False)  # This code helps to disable windows from resizing
 
-    window_height = 300
-    window_width = 800
+    window_height = 600
+    window_width = 660
 
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
