@@ -40,20 +40,20 @@ class Encrypt(Frame):
         Frame.__init__(self, pencere)
         self.pencere = pencere
 
-        Label(pencere, text="Enter text... ", relief=GROOVE, width=25).place(x=210, y=15)
+        Label(pencere, text="Enter text... ", relief=GROOVE, width=25).place(x=60, y=15)
         self.Ent1 = Entry(pencere, width=30)
-        self.Ent1.place(x=208, y=50)
+        self.Ent1.place(x=58, y=50)
 
-        Button(pencere, text="Encrypt", relief=GROOVE, font="bold", command=self.Encrypt).place(x=180, y=100)
-        Button(pencere, text="Decrypt", relief=GROOVE, font="bold", command=self.Decrypt).place(x=340, y=100)
+        Button(pencere, text="Encrypt", relief=GROOVE, font="bold", command=self.Encrypt).place(x=30, y=100)
+        Button(pencere, text="Decrypt", relief=GROOVE, font="bold", command=self.Decrypt).place(x=190, y=100)
 
-
-        Label(pencere, text="The Result: ", relief=GROOVE, width=25).place(x=210, y=160)
+        Label(pencere, text="The Result: ", relief=GROOVE, width=25).place(x=60, y=160)
         self.Result = Entry(pencere, width=30)
-        self.Result.place(x=208, y=190)
-        Label(pencere, text="The intial configuration...", relief=GROOVE, width=25).place(x=210, y=240)
+
+        self.Result.place(x=58, y=190)
+        Label(pencere, text="The intial configuration...", relief=GROOVE, width=25).place(x=60, y=240)
         self.RESULTExplain = Text(pencere, width=77)
-        self.RESULTExplain.place(x=20, y=290)
+        self.RESULTExplain.place(x=290, y=15)
 
     def converter(self, word):
         """
@@ -120,37 +120,65 @@ class Encrypt(Frame):
         global decryptedText
         global MAList
         decryptedText = ""
+        self.RESULTExplain.delete(1.0, END)
+        self.Result.config(state=NORMAL)
+        self.RESULTExplain.config(state=NORMAL)
         index = 2
         NOS = 0
         NOL = 0
-        self.RESULTExplain.insert(INSERT, "###############################Encryption############################### \n")
-        self.RESULTExplain.insert(INSERT, "We first create a \n")
+        self.RESULTExplain.insert(INSERT, "###############################Decryption############################### \n")
+        self.RESULTExplain.insert(INSERT, "We first create the alphabetic list \n")
+        self.RESULTExplain.insert(INSERT, NoMono())
+        self.RESULTExplain.insert(INSERT, "\n")
+        self.RESULTExplain.insert(INSERT, "We then take the encrypted list of numbers and add them to a list \n")
+        self.RESULTExplain.insert(INSERT, finalEncryptList)
+        self.RESULTExplain.insert(INSERT, "\n")
         for x in finalEncryptList:
             if index == 2:
                 index = index - 1
                 output = MonoToNon([x], MAList)
+                self.RESULTExplain.insert(INSERT, "Now we map the encrypted letter with the unencrypted list\n")
                 NOS = output
+                self.RESULTExplain.insert(INSERT, "In this case the %d maps to %d which is the Number of shifts"
+                                                  "\n" % (int(x), int(NOS)))
                 finalDecryptList.append(output)
             elif index == 1:
                 index = index - 1
+                self.RESULTExplain.insert(INSERT, "Now we map the encrypted letter with the unencrypted list\n")
                 output2 = MonoToNon([x], MAList)
                 NOL = output2
+                self.RESULTExplain.insert(INSERT, "In this case the %d maps to %d which is the number of letter to "
+                                                  "shift \n" % (int(x), int(NOS)))
                 finalDecryptList.append(output2)
             else:
                 if NOL != 0:
+                    self.RESULTExplain.insert(INSERT, "now we are deciphering caesar cipher number\n")
                     NACC = (x - NOS) % 26
                     if NACC == 0:
                         NACC = 26
+                    self.RESULTExplain.insert(INSERT, "%d deciphered to %d\n" % (int(x), int(NACC)))
                     finalDecryptList.append(NACC)
                     NOL = NOL - 1
                     if NOL == 0:
                         index = 2
+        self.RESULTExplain.insert(INSERT, "the result of the decryption in a list format is \n")
+        self.RESULTExplain.insert(INSERT, finalDecryptList)
+        self.RESULTExplain.insert(INSERT, "\n")
         DecryptList = self.converter2(finalDecryptList)
+        self.RESULTExplain.insert(INSERT, "we now convert the numbers back to letters and the result is \n")
+        self.RESULTExplain.insert(INSERT, DecryptList)
+        self.RESULTExplain.insert(INSERT, "\n")
         for last in DecryptList:
             decryptedText = decryptedText + last
-
+        self.RESULTExplain.insert(INSERT, "the final result of the decryption a text format is: ")
+        self.RESULTExplain.insert(INSERT, decryptedText)
         self.Result.delete(0, END)
         self.Result.insert(0, decryptedText)
+        self.Result.config(state=DISABLED)
+        self.RESULTExplain.config(state=DISABLED)
+        decryptedText = ""
+        finalEncryptList = []
+        finalDecryptList = []
 
     def Encrypt(self):
 
@@ -163,6 +191,9 @@ class Encrypt(Frame):
         global MAList
         global encryptedText
         global finalEncryptList
+        self.RESULTExplain.delete(1.0, END)
+        self.Result.config(state=NORMAL)
+        self.RESULTExplain.config(state=NORMAL)
         encryptedText = ""
         text = self.Ent1.get()
         index = 2
@@ -223,16 +254,20 @@ class Encrypt(Frame):
         self.RESULTExplain.insert(INSERT, encryptedText)
         self.Result.delete(0, END)
         self.Result.insert(0, encryptedText)
+        self.Result.config(state=DISABLED)
+        self.RESULTExplain.config(state=DISABLED)
+        encryptedText = ""
 
 
 if __name__ == "__main__":
     root = Tk()
     root.title("Monosar")
+    root.iconbitmap(r'favicon.ico')
 
     # root.resizable(False, False)  # This code helps to disable windows from resizing
 
-    window_height = 600
-    window_width = 660
+    window_height = 420
+    window_width = 950
 
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
