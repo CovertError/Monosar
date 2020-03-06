@@ -1,4 +1,3 @@
-from random import shuffle
 from tkinter import *
 
 
@@ -42,7 +41,7 @@ finalEncryptList = []  # initializing variables
 encryptedList = []
 
 
-class Encrypt(Frame):
+class Monosar(Frame):
     encryptedText = ""  # initializing variables
     decryptedText = ""
 
@@ -80,22 +79,22 @@ class Encrypt(Frame):
         input types: array of string
         Return : array of integers
         """
-        thisdict = {
+        dictLetters2Numbers = {
             "a": "1",
             "b": "2", "c": "3", "d": "4", "e": "5", "f": "6", "g": "7", "h": "8", "i": "9",
             "j": "10", "k": "11", "l": "12", "m": "13", "n": "14", "o": "15", "p": "16",
             "q": "17", "r": "18", "s": "19", "t": "20", "u": "21", "v": "22", "w": "23",
             "x": "24", "y": "25", "z": "26"
         }
-        myList = []
+        numberList = []
         for x in word:
-            if x in thisdict:
-                myList.append(int(thisdict[x]))
+            if x in dictLetters2Numbers:
+                numberList.append(int(dictLetters2Numbers[x]))
             elif x == ' ':  # checking if there is a space
-                myList.append(' ')
+                numberList.append(' ')
             else:
-                myList.append(int(0))
-        return myList
+                numberList.append(int(0))
+        return numberList
 
     def converter2(self, dec):
         """
@@ -104,7 +103,7 @@ class Encrypt(Frame):
         input types: array of integers
         output types: array of strings
         """
-        thisdict2 = {
+        dictNum2Letters = {
             "1": "a",
             "2": "b", "3": "c", "4": "d", "5": "e", "6": "f", "7": "g", "8": "h", "9": "i",
             "10": "j", "11": "k", "12": "l", "13": "m", "14": "n", "15": "o", "16": "p",
@@ -112,15 +111,15 @@ class Encrypt(Frame):
             "24": "x", "25": "y", "26": "z"
         }
         temp = []
-        myList = []
+        letterList = []
         for x in dec:
             temp.append(str(x))
         for y in temp:
             if y == ' ':  # checkin if there is a space
-                myList.append(' ')
-            elif y in thisdict2:
-                myList.append(thisdict2[y])
-        return myList
+                letterList.append(' ')
+            elif y in dictNum2Letters:
+                letterList.append(dictNum2Letters[y])
+        return letterList
 
     def Encrypt(self):
 
@@ -133,16 +132,15 @@ class Encrypt(Frame):
         global MAList
         global encryptedText
         global finalEncryptList
-        self.Result.config(state=NORMAL)  # enabling edit to the field
-        self.initConfig.config(state=NORMAL)  # enabling edit to the field
-        self.initConfig.delete(1.0, END)  # clearing the field
         encryptedText = ""
-        text = self.Ent1.get()
         index = 2
         NOS = 0  # initializing variables
         NOL = 0
-        nIter = 0
+        text = self.Ent1.get()
         conv = self.converter(text)
+        self.Result.config(state=NORMAL)  # enabling edit to the field
+        self.initConfig.config(state=NORMAL)  # enabling edit to the field
+        self.initConfig.delete(1.0, END)  # clearing the field
         self.initConfig.insert(INSERT, "###############################Encryption############################### \n")
         self.initConfig.insert(INSERT, "We first create the mono alphabetic list \n")
         self.initConfig.insert(INSERT, [["a"], ["b"], ["c"], ["d"], ["e"], ["f"], ["g"], ["h"], ["i"], ["j"], ["k"],
@@ -170,7 +168,6 @@ class Encrypt(Frame):
             elif index == 2:
                 NOS = x
                 index = index - 1
-                nIter = nIter + 1
                 output = MAList[x]  # checking if index is equal to 2 if it is then we set the number of shifts to x
                 str1 = 0
                 for last in output:
@@ -179,7 +176,6 @@ class Encrypt(Frame):
                 self.initConfig.insert(INSERT, "Here we set the Number of Shifts to %d\n" % (int(x)))
             elif index == 1:
                 index = index - 1
-                nIter = nIter + 1
                 NOL = x  # checking if index is equal to 2 if it is then we set the number of letters to shift to x
                 output2 = MAList[x]
                 str2 = 0
@@ -229,12 +225,12 @@ class Encrypt(Frame):
         global decryptedText
         global MAList
         decryptedText = ""
-        self.Result.config(state=NORMAL)
-        self.initConfig.config(state=NORMAL)
-        self.initConfig.delete(1.0, END)
         index = 2
         NOS = 0  # initializing variables
         NOL = 0
+        self.initConfig.delete(1.0, END)
+        self.Result.config(state=NORMAL)
+        self.initConfig.config(state=NORMAL)
         self.initConfig.insert(INSERT, "###############################Decryption############################### \n")
         self.initConfig.insert(INSERT, "We first create the alphabetic list \n")
         self.initConfig.insert(INSERT, [["a"], ["b"], ["c"], ["d"], ["e"], ["f"], ["g"], ["h"], ["i"], ["j"], ["k"],
@@ -324,5 +320,5 @@ if __name__ == "__main__":
     y_cordinate = int((screen_height / 2) - (window_height / 2))
     root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
 
-    Encrypt(root).pack(side="top", fill="both")
+    Monosar(root).pack(side="top", fill="both")
     root.mainloop()

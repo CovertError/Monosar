@@ -1,9 +1,13 @@
-from random import shuffle
+from string import ascii_letters
+from operator import itemgetter
+from nltk.corpus import words
+from nltk.corpus import wordnet
 
 finalDecryptList = []
 finalEncryptList = []
 encryptedText = ""
 decryptedText = ""
+firstRun = 0
 
 
 def converter(word):
@@ -58,85 +62,119 @@ def converter2(dec):
 
 
 def Mono():
-    MAlist = [[i] for i in range(27)]
-    shuffle(MAlist)
+    MAlist = [[9], [19], [26], [2], [3], [13], [7], [10], [4], [15], [16], [23], [6], [24], [0], [1], [5], [14], [8],
+              [11], [20], [21], [22], [25], [12], [17], [18]]  # this is a static mono alphabetic list
     return MAlist
 
 
-def MonoToNon(monoNumber):
+def MonoToNon(monoNumber, MAList):
+    """
+    This function is used to map the mono alphabetic number to its location in the list
+    then it returns that index of where the number is.
+    Return : array of integers
+    """
     indx = -1
-    for x in MAList:
-        if x == monoNumber:
-            indx += 1
-            return indx
+    for x in MAList:  # this is a for loop to iterate over the list
+        if x == monoNumber:  # this checks if the the current value is equal to the the current number in the list
+            indx += 1  # indicating that we are moving though the list
+            return indx  # returning where the number has been found
         else:
-            indx += 1
+            indx += 1  # if we couldn't find the number at that location we move the index
 
 
 def NoMono():
     NoMAlist = [[i] for i in range(27)]
-    NoMAlist.pop(0)
     return NoMAlist
 
 
-def Encrypt():
+def Encrypt(text):
+    """
+    This method implements the encryption algorithm given to encrypt lowercase
+    alphabetic charecters using a key
+    Input types: Integer, array of integers
+    Return: Array of integers
+    """
+    global MAList
     global encryptedText
-    text = "therewasnotimeheranoutofthedoorwithouthalfthestuffheneededforworkbutitdidntmatterhewaslateandifhedidntmakethismeetingontimesomeoneslifemaybeindangercolorsbouncedaroundinherheadtheymixedandthreadedthemselvestogetherevencolorsthathadnobusinessbeingtogethertheywerealloneyetdistinctlyseparateatthesametimehowwasshegoingtoexplainthistotheotherstherobotclickeddisapprovinglygurgledbrieflyinsideitscubicalinteriorandextrudedaponyglassofbrownishliquidsiryouwillundoubtedlyendupinadrunkardsgravedeadofhepaticcirrhosisitinformedmevirtuouslyasitreturnedmyidcardiglaredasipushedtheglassacrossthetablewhatwasbeyondthebendinthestreamwasunknownbothwerecuriousbutonlyonewasbraveenoughtowanttoexplorethatwastheproblemtherewasalwaysonethatletfearruleherlifeheheardthecrackechointhelateafternoonaboutamileawayhisheartstartedracingandheboltedintoafullsprintitwasntagunshotitwasntagunshotherepeatedunderhisbreathlessnessashecontinuedtosprintdoyouthinkyourelivinganordinarylifeyouaresomistakenitsdifficulttoevenexplainthemerefactthatyouexistmakesyouextraordinarytheoddsofyouexistingarelessthanwinningthelotterybuthereyouareareyougoingtoletthisextraordinaryopportunitypasssometimesthereisntagoodanswernomatterhowyoutrytorationalizetheoutcomeitdoesntmakesenseandinsteadofanansweryouaresimplyleftwithaquestionwhyitwasdifficulttoexplaintothemhowthediagnosisofcertaindeathhadactuallygivenhimlifewhileeveryonearoundhimwasintearsandupsetheactuallyfeltmoreateasethedoctorsaiditwouldbelessthanayearthatgavehimayeartolivesomethinghedfailedtodowithhisdailydrudgeryofaroutinethathadpassedaslifeuntilthenshewasinahurrynotthestandardhurrywhenyoureinarushtogetsomeplacebutafrantichurrythetypeofhurrywhereafewsecondscouldmeanlifeordeathsheraceddowntheroadignoringspeedlimitsandweavingbetweencarsshewasonlyafewminutesawaywhentrafficcametoadeadstandstillontheroadaheadifyoucanimagineafurryhumanoidsevenfeettallwiththefaceofanintelligentgorillaandthebraincaseofamanyoullhavearoughideaofwhattheylookedlikeexceptfortheirteeththecanineswouldhavefittedbetterinthefaceofatigerandshowedatthecornersoftheirwidethinlippedmouthsgivingthemanexpressionofferocitytheboywalkeddownthestreetinacarefreewayplayingwithoutnoticeofwhatwasabouthimhedidnthearthesoundofthecarashisballcareenedintotheroadhetookasteptowarditandindoingsosealedhisfateshewonderedifthenotehadreachedhimshescoldedherselffornothandingittohiminpersonshetrustedherfriendbutsomuchcouldhappenshewaitedimpatientlyforworddontbescaredthethingsouttherethatareunknownarentscaryinthemselvestheyarejustunknownatthemomenttakethetimetoknowthembeforeyoulistthemasscarythentheworldwillbeamuchlessscaryplaceforyouitsalwaysgoodtobringaslowerfriendwithyouonahikeifyouhappentocomeacrossbearsthewholegroupdoesnthavetoworryonlytheslowestinthegroupdothatwasthelessontheywereabouttolearnthatdayitwentthroughsuchrapidcontortionsthatthelittlebearwasforcedtochangehisholdonitsomanytimeshebecameconfusedinthedarknessandcouldnotforthelifeofhimtellwhetherheheldthesheeprightsideuporupsidedownbutthatpointwasdecidedforhimamomentlaterbytheanimalitselfwhowithasuddentwistjabbeditshornssohardintohislowestribsthathegaveagruntofangeranddisgusthewonderedifheshoulddisclosethetruthtohisfriendsitwouldbeariskymoveyesthetruthwouldmakethingsaloteasieriftheyallstayedonthesamepagebutthetruthmightfracturethegroupleavingeverythinginevenmoreofamessthanitwasnottellingthetruthitwastimetodecidewhichwaytogoitwasgoingtoraintheweatherforecastdidntsaythatbutthesteelplateinhishipdidhehadlearnedovertheyearstotrusthishipovertheweathermanitwasgoingtorainsohebettergetoutsideandpreparethechairsatinthecornerwhereithadbeenforoveryearstheonlydifferencewastherewassomeoneactuallysittinginithowlonghaditbeensincesomeonehaddonethattenyearsormoreheimaginedyettherewasnodenyingthepresenceinthechairnoweatingrawfishdidntsoundlikeagoodideaitsadelicacyinjapandidntseemtomakeitanymoreappetizingrawfishisrawfishdelicacyornotthewordshadntflowedfromhisfingersforthepastfewweeksheneverimaginedhedfindhimselfwithwritersblockbutherehesatwithablankscreeninfrontofhimthatblankscreentauntinghimdayafterdayhadstartedtoplaywithhismindhedidntunderstandwhyhecouldnteventypeasinglewordjustonetobegintheprocessandbuildfromthereandyethealreadyknewthattheeighthourshewaspreparedtositinfrontofhiscomputertodaywouldendwiththescreenremainingblankhelookedatthesandpickingupahandfulhewonderedhowmanygrainswereinhishandhundredsofthousandsnotenoughthesaidunderhisbreathineedmoresincetheyarestillpreservedintherocksforustoseetheymusthavebeenformedquiterecentlythatisgeologicallyspeakingwhatcanexplainthesestriationsandtheircommonorientationdidyoueverhearaboutthegreaticeageorthepleistoceneepochlessthanonemillionyearsagoinfactsomeyearsagoanicesheetmanythousandsoffeetthickrodeoverburkemountaininasoutheastwarddirectionthemanybouldersfrozentotheundersideoftheicesheettendedtoscratchtherocksoverwhichtheyrodethescratchesorstriationsseenintheparkrockswerecausedbytheseattachedboulderstheicesheetalsopluckedandroundedburkemountainintotheshapeitpossessestodayirecentlydiscoveredicouldmakefudgewithjustchocolatechipssweetenedcondensedmilkvanillaextractandathickpotonslowheatitrieditwithdarkchocolatechunksanditrieditwithsemisweetchocolatechipsitsbetterwithbothkindsitcomesoutprettybadwithjustthedarkchocolatethebestaddinsarecrushedalmondsandmarshmallowswhatyougetfromthatisrockyroadittakesabouttwentyminutesfromstarttofridgeandthenittakesaboutsixmonthstoworkoffthetwentypoundsyougainfromeatingitallthingsinmoderationfriendsallthingsinmoderationhereyebrowswereashadedarkerthanherhairtheywerethickandalmosthorizontalemphasizingthedepthofhereyesshewasratherhandsomethanbeautifulherfacewascaptivatingbyreasonofacertainfranknessofexpressionandacontradictorysubtleplayoffeatureshermannerwasengagingiverentedacarinlasvegasandhavereservedahotelintwentyninepalmswhichisjustnorthofjoshuatreewelldrivefromlasvegasthroughmojavenationalpreserveandpossiblydoashorthikeonourwaydownthenspendalldayonmondayatjoshuatreewecandecidethenextmorningifwewanttodomoreinjoshuatreeormojavebeforeweheadback"
+    global finalEncryptList
+    encryptedText = ""
     index = 2
-    NOS = 0
+    NOS = 0  # initializing variables
     NOL = 0
-    nIter = 0
     conv = converter(text)
+    if len(finalEncryptList) != 0:
+        finalEncryptList = []  # clearing the list if its not empty
 
     for x in conv:
-        if index == 2:
+        if x == " ":
+            finalEncryptList.append(" ")  # checking if x is a pace and if it is adding a space the final list
+        elif index == 2:
             NOS = x
             index = index - 1
-            nIter = nIter + 1
-            output = MAList[x]
+            output = MAList[x]  # checking if index is equal to 2 if it is then we set the number of shifts to x
             str1 = 0
             for last in output:
-                str1 += last
-            finalEncryptList.append(str1)
+                str1 += last  # converting from a list to string
+            finalEncryptList.append(str1)  # adding the result to the list
         elif index == 1:
             index = index - 1
-            nIter = nIter + 1
-            NOL = x
+            NOL = x  # checking if index is equal to 2 if it is then we set the number of letters to shift to x
             output2 = MAList[x]
             str2 = 0
             for last2 in output2:
-                str2 += last2
-            finalEncryptList.append(str2)
+                str2 += last2  # converting from a list to string
+            finalEncryptList.append(str2)  # adding the result to the list
         else:
             if NOL != 0:
                 NACC = (x + NOS) % 26
-                if NACC == 0:
-                    NACC = 26
-                finalEncryptList.append(NACC)
-                NOL = NOL - 1
+                if NACC == 0:  # checking if the Number After the Caesar Cipher is equal to 0 and then
+                    NACC = 26  # setting it to 26
+                finalEncryptList.append(NACC)  # appending the final number to the list
+
+                NOL = NOL - 1  # decreasing the number of letter to shift
                 if NOL == 0:
                     index = 2
-    NoMono()
-    encryptedList = converter2(finalEncryptList)
-    for last in encryptedList:
+
+    encryptedList = converter2(finalEncryptList)  # converting the numbers to letters
+
+    for last in encryptedList:  # converting the the list into a string
         encryptedText = encryptedText + last
-    print("This is the encrypted Text: " + encryptedText)
+    return encryptedText
 
 
 def Decrypt():
+    """
+    This function is used to decrypt the given ciphertext
+    Return: Array of Integers
+
+    """
+
+    global finalDecryptList
     global decryptedText
+    global finalEncryptList
+    global encryptedText
+    global decryptedText
+    MAList = Mono()
+    decryptedText = ""
     index = 2
-    NOS = 0
+    NOS = 0  # initializing variables
     NOL = 0
+
+    if len(finalDecryptList) != 0:
+        finalDecryptList = []
+
     for x in finalEncryptList:
-        if index == 2:
+        if x == " ":
+            finalDecryptList.append(" ")
+
+        elif index == 2:
             index = index - 1
-            output = MonoToNon([x])
-            NOS = output
+            output = MonoToNon([x], MAList)  # here we are getting the index of the encrypted letter
+            NOS = output  # setting back the number of letters to shift
             finalDecryptList.append(output)
         elif index == 1:
             index = index - 1
-            output2 = MonoToNon([x])
+            output2 = MonoToNon([x], MAList)
             NOL = output2
             finalDecryptList.append(output2)
         else:
@@ -149,12 +187,193 @@ def Decrypt():
                 if NOL == 0:
                     index = 2
     DecryptList = converter2(finalDecryptList)
+
     for last in DecryptList:
         decryptedText = decryptedText + last
 
-    print("This is the decrypted Text: " + decryptedText)
+    return decryptedText
 
 
-MAList = Mono()
-Encrypt()
-Decrypt()
+MAList = Mono()  # running the function and setting it to the variable MAList
+encryptedList = []
+
+
+def letters(text):
+    letter_dict = {}
+    total = 0
+    count = 0
+    mostCommonLetters = ""
+    p = "%"
+    for letter in text:
+        if letter in ascii_letters:
+            try:
+                letter_dict[letter] += 1
+            except KeyError:
+                letter_dict[letter] = 1
+
+    print("=" * 5, 'Letters', "=" * 5)
+    for x in letter_dict.values():
+        total += x
+    for letter in sorted(letter_dict.items(), key=itemgetter(1), reverse=True):
+        if count != 3:
+            mostCommonLetters += letter[0]
+            count += 1
+        x = ((letter[1] / total) * 100)
+        print("the %s %.2f%s " % (letter, x, p))
+    return mostCommonLetters
+
+
+def bigrams(text):
+    bigram_dict = {}
+    bigram_holder = []
+    total = 0
+    p = "%"
+    for letter in text:
+        if letter not in ascii_letters:
+            bigram_holder = []
+            continue
+        else:
+            bigram_holder.append(letter)
+
+        if len(bigram_holder) == 2:
+            bigram = bigram_holder[0] + bigram_holder[1]
+            try:
+                bigram_dict[bigram] += 1
+            except KeyError:
+                bigram_dict[bigram] = 1
+
+            last = bigram_holder.pop()
+            bigram_holder = []
+            bigram_holder.append(last)
+
+    print("=" * 5, 'Bigrams', "=" * 5)
+    for x in bigram_dict.values():
+        total += x
+    for bigram in sorted(bigram_dict.items(), key=itemgetter(1), reverse=True):
+        x = ((bigram[1] / total) * 100)
+        print("the %s %.2f%s " % (bigram, x, p))
+
+
+def trigrams(text):
+    trigram_dict = {}
+    trigram_holder = []
+    total = 0
+    p = "%"
+    for letter in text:
+        if letter not in ascii_letters:
+            trigram_holder = []
+            continue
+        else:
+            trigram_holder.append(letter)
+
+        if len(trigram_holder) == 3:
+            trigram = trigram_holder[0] + trigram_holder[1] + trigram_holder[2]
+            try:
+                trigram_dict[trigram] += 1
+            except KeyError:
+                trigram_dict[trigram] = 1
+
+            l1 = trigram_holder.pop()
+            l2 = trigram_holder.pop()
+            trigram_holder = []
+            trigram_holder.append(l2)
+            trigram_holder.append(l1)
+
+    print("=" * 5, 'Trigrams', "=" * 5)
+    for x in trigram_dict.values():
+        total += x
+    for trigram in sorted(trigram_dict.items(), key=itemgetter(1), reverse=True):
+        x = ((trigram[1] / total) * 100)
+        print("the %s %.2f%s " % (trigram, x, p))
+
+
+
+
+def is_english_word(word):
+    setofwords = set(words.words())
+    setofnetwords = set(wordnet.words())
+    if word in setofwords:
+        return True
+    elif word in setofnetwords:
+        return True
+    else:
+        return False
+
+
+def CryptoAnaylisis(encryptedTextToAnalize):
+    posEncryptedList = 0
+    finalCryptoList = []
+    monoCryptoList = []
+    cryptoCurrentList = []
+    posCCList = 0
+    monoIndex = 0
+    localMAList = NoMono()
+    textCryptoCurrent = ""
+    textCryptoFinal = ""
+    control = 0
+    notEcrypted = True
+    wordStart = False
+    firstWord = True
+    CLList = letters(encryptedText)
+    encryptedTextConv = converter(encryptedTextToAnalize)
+    CCLList = converter(CLList)
+
+    while notEcrypted:
+        if posCCList == 0:
+            checkNum = CCLList[0] - 5
+            for x in encryptedTextConv:
+                if control != 2:
+                    finalCryptoList.append(x)
+                    monoCryptoList.append(x)
+                    posEncryptedList += 1
+                    control += 1
+                elif control == 2:
+                    if x == " " and firstWord:
+                        finalCryptoList.append(x)
+                        posEncryptedList += 1
+                        wordStart = True
+                        firstWord = False
+                    else:
+                        if wordStart:
+                            if x == " " and firstWord is False:
+                                textCryptoCurrentList = converter2(cryptoCurrentList)
+                                for last in textCryptoCurrentList:  # converting the the list into a string
+                                    textCryptoCurrent += last
+                                if is_english_word(textCryptoCurrent):
+                                    is_english = "it is a word"
+                                else:
+                                    is_english = "not a word"
+
+                                print("I think %s is a word and our english dict says its %s but if you think it is "
+                                      "then write yes else write no" % (textCryptoCurrent, is_english))
+                                userInput = input()
+                                if userInput == "yes":
+                                    print("great")
+                                    cryptoCurrentList.append(x)
+                                    finalCryptoList += cryptoCurrentList
+                                    localMAList[checkNum] = [monoCryptoList[monoIndex]]
+                                    # TODO: replace the mon with the non mon
+                                    finalListToPrint = converter2(finalCryptoList)
+                                    for last in finalListToPrint:  # converting the the list into a string
+                                        textCryptoFinal += last
+                                    print("The current final decrypted text is: %s" % textCryptoFinal)
+                                    textCryptoCurrent = ""
+                                    cryptoCurrentList = []
+                                    textCryptoFinal = ""
+
+                                else:
+                                    print("shit okay we will reset")
+                                    # TODO: Do the Reset part and figure how lol
+                                posEncryptedList += 1
+                            else:
+                                cryptoCurrentList.append(x - checkNum)
+                                posEncryptedList += 1
+
+                        else:
+                            finalCryptoList.append(x)
+        break
+
+
+testToAnylize = "axe man killed someone while he was a sleep"
+encryptedTextToAnalize = Encrypt(testToAnylize)
+CryptoAnaylisis(encryptedTextToAnalize)
