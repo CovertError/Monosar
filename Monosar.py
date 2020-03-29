@@ -1,5 +1,10 @@
 from tkinter import *
+from colorama import init
+from termcolor import cprint
+from pyfiglet import figlet_format
 
+init(strip=not sys.stdout.isatty())  # strip colors if stdout is redirected
+cprint(figlet_format('Monosar', font='starwars'), attrs=['bold'])
 
 def Mono():
     """
@@ -160,7 +165,7 @@ class Monosar(Frame):
         self.initConfig.insert(INSERT, "\n")
 
         if len(finalEncryptList) != 0:
-            finalEncryptList = []  # clearing the list if its not empty
+            finalEncryptList = []  # clearing the list if its not empty to enable new text encryption
 
         for x in conv:
             if x == " ":
@@ -185,7 +190,7 @@ class Monosar(Frame):
                 self.initConfig.insert(INSERT, "Here we set the Number of Letter to do the shift to %d\n" % (int(x)))
             else:
                 if NOL != 0:
-                    NACC = (x + NOS) % 26
+                    NACC = (x + NOS) % 26  # number after Caesar Cipher
                     if NACC == 0:  # checking if the Number After the Caesar Cipher is equal to 0 and then
                         NACC = 26  # setting it to 26
                     finalEncryptList.append(NACC)  # appending the final number to the list

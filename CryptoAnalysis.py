@@ -1,7 +1,13 @@
+import sys
 from string import ascii_letters
 from operator import itemgetter
-from nltk.corpus import words
 from nltk.corpus import wordnet
+from colorama import init
+from termcolor import cprint
+from pyfiglet import figlet_format
+
+init(strip=not sys.stdout.isatty())  # strip colors if stdout is redirected
+cprint(figlet_format('Monosar', font='starwars'), attrs=['bold'])
 
 finalDecryptList = []
 finalEncryptList = []
@@ -82,9 +88,33 @@ def MonoToNon(monoNumber, MAList):
             indx += 1  # if we couldn't find the number at that location we move the index
 
 
+def is_english_word(word):
+    setofnetwords = set(wordnet.words())
+    if word in setofnetwords:
+        return True
+    else:
+        return False
+
+
 def NoMono():
     NoMAlist = [[i] for i in range(27)]
     return NoMAlist
+
+
+def ListAlterer(listToAlter, number):
+    newList = []
+    for n, x in enumerate(listToAlter):
+        if n > number:
+            newList.append(x)
+    return newList
+
+
+def getNOL(listToCheck):
+    NOL = -2
+    for x in listToCheck:
+        if x != " ":
+            NOL += 1
+    return NOL
 
 
 def Encrypt(text):
@@ -140,58 +170,6 @@ def Encrypt(text):
     for last in encryptedList:  # converting the the list into a string
         encryptedText = encryptedText + last
     return encryptedText
-
-
-def Decrypt():
-    """
-    This function is used to decrypt the given ciphertext
-    Return: Array of Integers
-
-    """
-
-    global finalDecryptList
-    global decryptedText
-    global finalEncryptList
-    global encryptedText
-    global decryptedText
-    MAList = Mono()
-    decryptedText = ""
-    index = 2
-    NOS = 0  # initializing variables
-    NOL = 0
-
-    if len(finalDecryptList) != 0:
-        finalDecryptList = []
-
-    for x in finalEncryptList:
-        if x == " ":
-            finalDecryptList.append(" ")
-
-        elif index == 2:
-            index = index - 1
-            output = MonoToNon([x], MAList)  # here we are getting the index of the encrypted letter
-            NOS = output  # setting back the number of letters to shift
-            finalDecryptList.append(output)
-        elif index == 1:
-            index = index - 1
-            output2 = MonoToNon([x], MAList)
-            NOL = output2
-            finalDecryptList.append(output2)
-        else:
-            if NOL != 0:
-                NACC = (x - NOS) % 26
-                if NACC == 0:
-                    NACC = 26
-                finalDecryptList.append(NACC)
-                NOL = NOL - 1
-                if NOL == 0:
-                    index = 2
-    DecryptList = converter2(finalDecryptList)
-
-    for last in DecryptList:
-        decryptedText = decryptedText + last
-
-    return decryptedText
 
 
 MAList = Mono()  # running the function and setting it to the variable MAList
@@ -287,26 +265,17 @@ def trigrams(text):
         print("the %s %.2f%s " % (trigram, x, p))
 
 
-
-
-def is_english_word(word):
-    setofwords = set(words.words())
-    setofnetwords = set(wordnet.words())
-    if word in setofwords:
-        return True
-    elif word in setofnetwords:
-        return True
-    else:
-        return False
-
-
-def CryptoAnaylisis(encryptedTextToAnalize):
+def CryptoAnalysis(encryptedTextToAnalysis):
     posEncryptedList = 0
+    mostCommonList = [5, 1]
+    mostCommon = 0
     finalCryptoList = []
     monoCryptoList = []
     cryptoCurrentList = []
     posCCList = 0
-    monoIndex = 0
+    monoIndexNOS = 0
+    monoIndexNOL = 1
+    spaceCounter = 0  # initializing variables
     localMAList = NoMono()
     textCryptoCurrent = ""
     textCryptoFinal = ""
@@ -314,25 +283,41 @@ def CryptoAnaylisis(encryptedTextToAnalize):
     notEcrypted = True
     wordStart = False
     firstWord = True
-    CLList = letters(encryptedText)
-    encryptedTextConv = converter(encryptedTextToAnalize)
-    CCLList = converter(CLList)
+    done = False
+    print("The encrypted text is: " + encryptedText)
+    CLList = letters(encryptedText)  # getting the common letters list
+    encryptedTextConv = converter(encryptedTextToAnalysis)
+    encryptedTextConvMain = converter(encryptedTextToAnalysis)
+    CCLList = converter(CLList)  # getting the common letters list to numbers
 
     while notEcrypted:
         if posCCList == 0:
-            checkNum = CCLList[0] - 5
+            checkNum = CCLList[0] - mostCommonList[mostCommon]
             for x in encryptedTextConv:
-                if control != 2:
+                if control == 0:
                     finalCryptoList.append(x)
                     monoCryptoList.append(x)
+                    monoIndexNOS = posEncryptedList
                     posEncryptedList += 1
                     control += 1
+                    if x == " ":
+                        spaceCounter += 1
+                elif control == 1:
+                    finalCryptoList.append(x)
+                    monoCryptoList.append(x)
+                    monoIndexNOL = posEncryptedList
+                    posEncryptedList += 1
+                    control += 1
+                    if x == " ":
+                        spaceCounter += 1
                 elif control == 2:
                     if x == " " and firstWord:
                         finalCryptoList.append(x)
                         posEncryptedList += 1
                         wordStart = True
                         firstWord = False
+                        if x == " ":
+                            spaceCounter += 1
                     else:
                         if wordStart:
                             if x == " " and firstWord is False:
@@ -343,6 +328,8 @@ def CryptoAnaylisis(encryptedTextToAnalize):
                                     is_english = "it is a word"
                                 else:
                                     is_english = "not a word"
+                                if x == " ":
+                                    spaceCounter += 1
 
                                 print("I think %s is a word and our english dict says its %s but if you think it is "
                                       "then write yes else write no" % (textCryptoCurrent, is_english))
@@ -351,8 +338,8 @@ def CryptoAnaylisis(encryptedTextToAnalize):
                                     print("great")
                                     cryptoCurrentList.append(x)
                                     finalCryptoList += cryptoCurrentList
-                                    localMAList[checkNum] = [monoCryptoList[monoIndex]]
-                                    # TODO: replace the mon with the non mon
+                                    localMAList[checkNum - 1] = [monoCryptoList[monoIndexNOS]]
+                                    finalCryptoList[monoIndexNOS] = checkNum
                                     finalListToPrint = converter2(finalCryptoList)
                                     for last in finalListToPrint:  # converting the the list into a string
                                         textCryptoFinal += last
@@ -360,20 +347,74 @@ def CryptoAnaylisis(encryptedTextToAnalize):
                                     textCryptoCurrent = ""
                                     cryptoCurrentList = []
                                     textCryptoFinal = ""
+                                elif userInput == "nope":
+                                    mostCommon += 1
+                                    textCryptoCurrent = ""
+                                    cryptoCurrentList = []
+                                    continue
 
                                 else:
-                                    print("shit okay we will reset")
-                                    # TODO: Do the Reset part and figure how lol
+                                    runCount = getNOL(finalCryptoList)
+                                    print("okay we will reset")
+                                    print("the current run count is %d if you think its okay then say yes else write"
+                                          " the right number" % runCount)
+
+                                    userInput = input()
+                                    if userInput == "yes":
+                                        localMAList[runCount] = [monoCryptoList[monoIndexNOL]]
+                                        finalCryptoList[monoIndexNOL] = runCount
+                                        finalListToPrint = converter2(finalCryptoList)
+                                        for last in finalListToPrint:  # converting the the list into a string
+                                            textCryptoFinal += last
+                                        finalRunCount = runCount
+                                        print("The current final decrypted text is: %s" % textCryptoFinal)
+                                    else:
+                                        localMAList[int(userInput)] = [monoCryptoList[monoIndexNOL]]
+                                        finalCryptoList[monoIndexNOL] = userInput
+                                        finalRunCount = int(userInput)
+                                        finalListToPrint = converter2(finalCryptoList)
+                                        for last in finalListToPrint:  # converting the the list into a string
+                                            textCryptoFinal += last
+                                        print("The current final decrypted text is: %s" % textCryptoFinal)
+
+                                    encryptedTextConv = ListAlterer(encryptedTextConv, finalRunCount + spaceCounter)
+                                    newEncryptedTextToAnalysis = converter2(encryptedTextConv)
+                                    CLList = letters(newEncryptedTextToAnalysis)
+                                    CCLList = converter(CLList)
+                                    textCryptoCurrent = ""
+                                    cryptoCurrentList = []
+                                    textCryptoFinal = ""
+                                    control = 0
+                                    posEncryptedList = 0
+                                    firstWord = True
+                                    wordStart = False
+                                    break
+
                                 posEncryptedList += 1
                             else:
+                                if (len(finalCryptoList) + len(cryptoCurrentList)) >= len(encryptedTextConvMain):
+                                    finalCryptoList += cryptoCurrentList
+                                    done = True
+                                    break
                                 cryptoCurrentList.append(x - checkNum)
                                 posEncryptedList += 1
+                                if x == " ":
+                                    spaceCounter += 1
 
                         else:
-                            finalCryptoList.append(x)
-        break
+                            finalCryptoList.append(x - checkNum)
+                            if x == " ":
+                                spaceCounter += 1
+        if done:
+            finalListToPrint = converter2(finalCryptoList)
+            for last in finalListToPrint:  # converting the the list into a string
+                textCryptoFinal += last
+            print("The final decrypted text is: %s" % textCryptoFinal)
+            break
 
 
-testToAnylize = "axe man killed someone while he was a sleep"
-encryptedTextToAnalize = Encrypt(testToAnylize)
-CryptoAnaylisis(encryptedTextToAnalize)
+testToEncrypt = "axe man killed someone while he axed his head a sleep"
+encryptedTextToAnalysis = Encrypt(testToEncrypt)
+CryptoAnalysis(encryptedTextToAnalysis)
+# bigrams(encryptedTextToAnalysis)
+# trigrams(encryptedTextToAnalysis)
