@@ -3,7 +3,7 @@ Monosar lThe main idea of the following project is creating a program that appli
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Use the package manager [pip](https://pip.pypa.io/en/stable/)
 
 ```bash
 pip install pyfiglet
