@@ -13,11 +13,13 @@ pip install wordnet
 ```
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+## Authors
+* **Omar Yassin** - *Initial work* - [CovertError](https://github.com/CovertError)
+* **Yusra Zvavi** - *Initial work* - [xyveh](https://github.com/xyveh)
+* **Rohan Bhadiyadra** 
 
-## Authors and acknowledgment
 
-@xyveh (Yusra Zvavi)
-Rohan Bhadiyadra
+See also the list of [contributors](https://github.com/CovertError/Monosar/contributors) who participated in this project.
 
 ## License
 [GNU AGPLv3](https://choosealicense.com/licenses/agpl-3.0/)
