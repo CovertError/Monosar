@@ -9,6 +9,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/)
 pip install pyfiglet
 pip install termcolor
 pip install colorama
+pip install wordnet
 ```
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
