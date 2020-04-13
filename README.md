@@ -18,5 +18,8 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 @xyveh (Yusra Zvavi)
 Rohan Bhadiyadra
 
+## License
+[GPL3](https://choosealicense.com/licenses/agpl-3.0/)
+
 
 
