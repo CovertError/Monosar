@@ -68,6 +68,10 @@ def converter2(dec):
 
 
 def Mono():
+    """
+    This function is used to set the the key AKA the mono alphabetic list
+    Return : array of integers
+    """
     MAlist = [[9], [19], [26], [2], [3], [13], [7], [10], [4], [15], [16], [23], [6], [24], [0], [1], [5], [14], [8],
               [11], [20], [21], [22], [25], [12], [17], [18]]  # this is a static mono alphabetic list
     return MAlist
@@ -89,6 +93,10 @@ def MonoToNon(monoNumber, MAList):
 
 
 def is_english_word(word):
+    """
+    This function is used to set the the key AKA the mono alphabetic list
+    Return : array of integers
+    """
     setofnetwords = set(wordnet.words())
     if word in setofnetwords:
         return True
@@ -297,7 +305,7 @@ def CryptoAnalysis(encryptedTextToAnalysis):
                 if control == 0:
                     finalCryptoList.append(x)
                     monoCryptoList.append(x)
-                    monoIndexNOS = posEncryptedList
+                    monoIndexNOS = posEncryptedList #
                     posEncryptedList += 1
                     control += 1
                     if x == " ":
@@ -413,8 +421,9 @@ def CryptoAnalysis(encryptedTextToAnalysis):
             break
 
 
-testToEncrypt = "axe man killed someone while he axed his head a sleep"
+testToEncrypt = ""
 encryptedTextToAnalysis = Encrypt(testToEncrypt)
-CryptoAnalysis(encryptedTextToAnalysis)
-# bigrams(encryptedTextToAnalysis)
-# trigrams(encryptedTextToAnalysis)
+# CryptoAnalysis(encryptedTextToAnalysis)
+letters(encryptedTextToAnalysis)
+bigrams(encryptedTextToAnalysis)
+trigrams(encryptedTextToAnalysis)
